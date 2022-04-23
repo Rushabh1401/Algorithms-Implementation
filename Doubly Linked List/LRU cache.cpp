@@ -59,7 +59,7 @@ class LRUCache {
       m.erase(key_);
       deletenode(existingnode);
     }
-    if (m.size() == cap) {
+    else if (m.size() == cap) {
       m.erase(tail -> prev -> key);
       deletenode(tail -> prev);
     }
