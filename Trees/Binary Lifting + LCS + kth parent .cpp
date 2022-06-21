@@ -20,14 +20,14 @@ void dfs(int node, int par, vector<vector<int>>&adj, vector<int>&depth, vector<v
 
 void find_all_powof2_parents(vector<vector<int>>&powof2_parent, int limit, int n)
 {
-	for (int i = 1 ; i < limit ; i++)
+	for (int i = 1 ; i <= limit ; i++)
 	{
 		for (int j = 1 ; j <= n ; j++)
 		{
 			//4th parent of node is node ka 2nd parent's 2nd parent.
 			int intermediate = powof2_parent[j][i - 1];
 
-			if (intermediate != 0)
+			if (intermediate != -1)
 				powof2_parent[j][i] = powof2_parent[intermediate][i - 1];
 		}
 	}
@@ -41,6 +41,9 @@ int find_k_parent(vector<vector<int>>&powof2_parent, int node, int k)
 	{
 		if ((1 << i)&k)
 			k_par = powof2_parent[k_par][i];
+
+		if (k_par == -1)
+			break;
 	}
 
 	return k_par;
@@ -60,7 +63,7 @@ int lcs(vector<int>&depth, vector<vector<int>>&powof2_parent, int a, int b, int 
 
 	for (int i = limit ; i >= 0 ; i--)
 	{
-		if (powof2_parent[a][i] == 0 || powof2_parent[a][i] == powof2_parent[b][i])
+		if (powof2_parent[a][i] == -1 || powof2_parent[a][i] == powof2_parent[b][i])
 			continue;
 
 		a = powof2_parent[a][i];
@@ -93,19 +96,19 @@ int main()
 	int limit = log2(n) + 2;
 
 	//all parents initially stored to 0;
-	vector<vector<int>>powof2_parent(n + 1, vector<int>(limit + 1, 0));
+	vector<vector<int>>powof2_parent(n + 1, vector<int>(limit + 1, -1));
 
 	//running dfs to caluclate depth and first parent which is stored in 0th column
-	dfs(1, 0, adj, depth, powof2_parent);
+	dfs(1, -1, adj, depth, powof2_parent);
 
 	//precomputation in O(nlogn)
 	find_all_powof2_parents(powof2_parent, limit, n);
 
 	//finding kth parent in O( log2(k) )
-	cout << find_k_parent(powof2_parent, 10, 3) << endl;
+	cout << find_k_parent(powof2_parent, 1, 3) << endl;
 
 	//finding lcs in O(log n) using precomputation
-	cout << lcs(depth, powof2_parent, 10, 4 , limit) << endl;
+	cout << lcs(depth, powof2_parent, 5, 4 , limit) << endl;
 
 	int i = 0;
 
@@ -118,6 +121,4 @@ int main()
 		i++;
 		cout << endl;
 	}
-
-
 }
