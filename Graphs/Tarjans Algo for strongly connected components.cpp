@@ -66,5 +66,5 @@ int main()
 	findSCCs_Tarjan();
 	return 0;
 }
-//Undirected Graph
+//Directed Graph
 //TIME COMPLEXITY: O(V+E)
